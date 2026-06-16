@@ -4,19 +4,20 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                echo 'Cloning Repository...'
+                echo 'Repository cloned successfully'
             }
         }
 
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Building Project...'
+                bat 'docker build -t techfest-website .'
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy Container') {
             steps {
-                echo 'Deploying Project...'
+                bat 'docker rm -f techfest-container || exit 0'
+                bat 'docker run -d -p 8080:80 --name techfest-container techfest-website'
             }
         }
     }
